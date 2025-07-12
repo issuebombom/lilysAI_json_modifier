@@ -85,6 +85,18 @@ if uploaded_files:
 
             elif (has_level_1 and has_level_2) and level == 1:
                 section["startTime"] = curr_start_time
+                content = section.get("content")
+                new_content = []
+                for string in content:
+                    if string == "":  # 빈 문자열 pass
+                        continue
+
+                    string = re.sub(r"</?(u|em)>", "", string)  # Remove <u>, </u>, <em>, </em>
+                    string = string.replace("**", "")  # Remove **
+                    string = re.sub(r"\s\[\d+\]$", "", string)
+                    new_content.append(string)
+
+                section["content"] = new_content
 
             new_data.append(section)
 
