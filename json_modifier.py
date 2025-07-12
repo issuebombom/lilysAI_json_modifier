@@ -33,6 +33,17 @@ if uploaded_files:
         file_name = uploaded_file.name
         data = json.load(uploaded_file)
 
+        # level 1, 2 존재여부 체크
+        has_level_1 = False
+        has_level_2 = False
+
+        for section in data:
+            level = section.get("level")
+            if level == 1:
+                has_level_1 = True
+            elif level == 2:
+                has_level_2 = True
+
         curr_start_time = 0
         new_data = []
 
@@ -43,7 +54,7 @@ if uploaded_files:
 
             level = section.get("level")
 
-            if level == 2:
+            if (has_level_1 and not has_level_2) or level == 2:
                 start_time = section.get("startTime")
                 if start_time == -1:
                     section["startTime"] = 0
@@ -56,7 +67,7 @@ if uploaded_files:
                     split_content = [s.lstrip("- ").strip() for s in split_content]
                     section["content"] = split_content
 
-            elif level == 1:
+            elif (has_level_1 and has_level_2) and level == 1:
                 section["startTime"] = curr_start_time
 
             new_data.append(section)
