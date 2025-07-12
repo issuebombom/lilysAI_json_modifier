@@ -3,6 +3,7 @@ import os
 import streamlit as st
 import zipfile
 import io
+import re
 
 """
 구현 기능 요약
@@ -16,6 +17,7 @@ import io
 3. 대제목의 하위 항목인 소제목의 startTime이 대제목의 startTime을 따르도록 수정한다.
 4. 내용이 없는 경우는 삭제한다. (content: [""])
 5. content에 스크린샷(screenshot)이 포함된 경우 "<<screenshot: undefined>>" 항목을 제거한다.
+6. 밑줄, 볼드체, 이텔릭체 적용 태그를 제거한다. [ex. <u>, </u>, <em>, </em>, ** ]
 
 실행
 1. 다운받은 json 파일을 업로드 합니다.
@@ -71,7 +73,12 @@ if uploaded_files:
                             continue
 
                         split_content = string.split("\n- ")
-                        cleaned = [s.lstrip("- ").strip() for s in split_content]
+                        cleaned = []
+                        for s in split_content:
+                            s = s.lstrip("- ").strip()
+                            s = re.sub(r"</?(u|em)>", "", s)  # Remove <u>, </u>, <em>, </em>
+                            s = s.replace("**", "")  # Remove **
+                            cleaned.append(s)
                         new_content.extend(cleaned)
 
                     section["content"] = new_content
