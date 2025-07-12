@@ -21,6 +21,7 @@ import io
 1. 다운받은 json 파일을 업로드 합니다.
 2. 처리가 완료되면 modified_jsons.zip 압축파일로 다운로드 받습니다.
 3. 해당 파일의 압축을 열어 수정완료된 json 파일을 확인합니다.
+4. 재업로드 시 페이지를 새로고침 한 뒤 진행해 주세요.
 """
 
 st.title("JSON Modifier")
