@@ -18,7 +18,6 @@ import re
 4. 내용이 없는 경우는 삭제한다. (content: [""])
 5. content에 스크린샷(screenshot)이 포함된 경우 "<<screenshot: undefined>>" 항목을 제거한다.
 6. 밑줄, 볼드체, 이텔릭체 적용 태그를 제거한다. [ex. <u>, </u>, <em>, </em>, ** ]
-7. 소제목의 내용 중 " [숫자]" 형태 제거 (ex. 파이썬에 대해서 설명한다. [14])
 
 실행
 1. 다운받은 json 파일을 업로드 합니다.
@@ -94,7 +93,7 @@ if uploaded_files:
 
                     string = re.sub(r"</?(u|em)>", "", string)  # Remove <u>, </u>, <em>, </em>
                     string = string.replace("**", "")  # Remove **
-                    string = re.sub(r"\s\[\d+\]$", "", string)
+                    # string = re.sub(r"\s\[\d+\]$", "", string) # Remove " [숫자]" -> 의도와 달리 인덱싱 코드를 삭제할 위험이 있어 비활성화
                     new_content.append(string)
 
                 section["content"] = new_content
