@@ -64,13 +64,16 @@ if uploaded_files:
                 # content 개행 분할 및 첫 항목의 "- " 제거
                 content = section.get("content")
                 if isinstance(content, list) and content:
+                    new_content = []
                     for string in content:
                         if ("screenshot" in string) or string == "":  # 스크린샷 or 빈 문자열 pass
                             continue
 
                         split_content = string.split("\n- ")
-                        split_content = [s.lstrip("- ").strip() for s in split_content]
-                        section["content"] = split_content
+                        cleaned = [s.lstrip("- ").strip() for s in split_content]
+                        new_content.extend(cleaned)
+
+                    section["content"] = new_content
 
             elif (has_level_1 and has_level_2) and level == 1:
                 section["startTime"] = curr_start_time
