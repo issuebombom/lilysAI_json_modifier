@@ -15,6 +15,7 @@ import io
 - after: ["파이썬에 대해서 설명한다.", "파이썬의 장점을 얘기한다."]
 3. 대제목의 하위 항목인 소제목의 startTime이 대제목의 startTime을 따르도록 수정한다.
 4. 내용이 없는 경우는 삭제한다. (content: [""])
+5. content에 스크린샷(screenshot)이 포함된 경우 "<<screenshot: undefined>>" 항목을 제거한다.
 
 실행
 1. 다운받은 json 파일을 업로드 합니다.
@@ -62,10 +63,14 @@ if uploaded_files:
 
                 # content 개행 분할 및 첫 항목의 "- " 제거
                 content = section.get("content")
-                if isinstance(content, list) and isinstance(content[0], str):
-                    split_content = content[0].split("\n- ")
-                    split_content = [s.lstrip("- ").strip() for s in split_content]
-                    section["content"] = split_content
+                if isinstance(content, list) and content:
+                    for string in content:
+                        if ("screenshot" in string) or string == "":  # 스크린샷 or 빈 문자열 pass
+                            continue
+
+                        split_content = string.split("\n- ")
+                        split_content = [s.lstrip("- ").strip() for s in split_content]
+                        section["content"] = split_content
 
             elif (has_level_1 and has_level_2) and level == 1:
                 section["startTime"] = curr_start_time
