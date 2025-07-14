@@ -94,7 +94,9 @@ if uploaded_files:
                     section["content"] = new_content
 
             elif (has_level_1 and has_level_2) and level == 1:
-                section["startTime"] = curr_start_time
+                start_time = section.get("startTime")
+                if start_time == -1:
+                    section["startTime"] = curr_start_time
                 content = section.get("content")
                 new_content = []
                 for string in content:
