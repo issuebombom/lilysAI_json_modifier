@@ -20,6 +20,8 @@ import re
 7. 문장 맨 끝에 " [숫자]" 또는 " [숫자]." 는 제거한다.
 - before: "파이썬 인덱싱은 [1], [2]와 같이 표기한다. [132]"
 - after: "파이썬 인덱싱은 [1], [2]와 같이 표기한다."
+8. 문장 끝이 " ." 이렇게 띄어쓰기 + 마침표의 경우 "."로 수정한다.
+9. 문장 끝이 마침표로 끝나지 않을 경우 마침표를 붙인다.
 
 실행
 1. 다운받은 json 파일을 업로드 합니다.
@@ -88,6 +90,13 @@ if uploaded_files:
                                     end_bracket == len(s) - 1 or (end_bracket == len(s) - 2 and s[end_bracket + 1] == ".")
                                 ):
                                     s = s[:idx].rstrip(". ") + "."
+
+                            s = s.strip()
+                            if s[-2:] == " .":  # 문장 끝이 " ."로 끝날 경우
+                                s = s[:-2] + "."
+                            if s[-1] != ".":  # 마침표가 없을 경우
+                                s = s + "."
+
                             cleaned.append(s)
                         new_content.extend(cleaned)
 
@@ -113,6 +122,12 @@ if uploaded_files:
                             end_bracket == len(string) - 1 or (end_bracket == len(string) - 2 and string[end_bracket + 1] == ".")
                         ):
                             string = string[:idx].rstrip(". ") + "."
+
+                    string = string.strip()
+                    if string[-2:] == " .":  # 문장 끝이 " ."로 끝날 경우
+                        string = string[:-2] + "."
+                    if string[-1] != ".":  # 마침표가 없을 경우
+                        string = string + "."
                     new_content.append(string)
 
                 section["content"] = new_content
