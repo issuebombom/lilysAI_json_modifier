@@ -32,6 +32,8 @@ import re
 
 st.title("JSON Modifier")
 
+st.markdown('# 기능 개선 중이어서 사용 잠시만 기다려 주세요 😎')
+
 uploaded_files = st.file_uploader("JSON 파일 업로드 (여러 개 가능)", type="json", accept_multiple_files=True)
 
 if uploaded_files:
