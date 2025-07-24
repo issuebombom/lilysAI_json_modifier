@@ -5,6 +5,7 @@ import io
 import re
 
 st.title("JSON Modifier")
+st.markdown("#### 릴리즈 AI를 통해 확보한 json의 버그를 수정합니다.")
 
 uploaded_files = st.file_uploader("JSON 파일 업로드 (여러 개 가능)", type="json", accept_multiple_files=True)
 
@@ -25,6 +26,10 @@ if uploaded_files:
             start_time = section.get("startTime")
             if start_time == -1:
                 section["startTime"] = 0
+
+            if start_time == None:
+                st.error(f"⛔ {file_name} 파일에 startTime이 null인 항목이 있습니다. 해당 항목의 값을 직접 입력해 주세요")
+                st.stop()
 
             # content 개행 분할 및 첫 항목의 "- " 제거
             content = section.get("content")
@@ -79,6 +84,8 @@ if uploaded_files:
     st.download_button(label="📦 수정된 JSON 압축 파일 다운로드", data=zip_buffer, file_name="modified_jsons.zip", mime="application/zip")
 
 
+st.markdown("")  # 공란
+
 """
 > 실행
 1. 릴리즈 AI에서 다운받은 json 파일을 업로드 합니다.
@@ -87,11 +94,16 @@ if uploaded_files:
 4. 재업로드 시 페이지를 새로고침 한 뒤 진행해 주세요.
 
 ---
+"""
+st.markdown("")  # 공란
+"""
 
-> 구현 기능 요약
-- 릴리즈 AI를 통해 확보한 json의 버그를 수정합니다.
-
-> 수정 적용 사항
+> `new` 수정 적용 사항
+- startTime이 간혹 null값일 경우 이를 직접 수정할 것을 경고함
+"""
+st.markdown("")  # 공란
+"""
+> History
 1. 첫 제목의 startTime이 -1로 찍히는 것을 0으로 변경한다.
 2. 대제목의 내용(content)를 아래와 같이 수정한다.
 - before: ["- 파이썬에 대해서 설명한다. \\n- 파이썬의 장점을 얘기한다. \\n- ..."]
