@@ -19,6 +19,8 @@ if uploaded_files:
         new_data = []
 
         for section in data:
+            level = section.get("level")
+            title = section.get("title")
             # 빈 content 필터링
             if section.get("content") == [""]:
                 continue
@@ -27,9 +29,19 @@ if uploaded_files:
             if start_time == -1:
                 section["startTime"] = 0
 
-            if start_time == None:
-                st.error(f"⛔ {file_name} 파일에 startTime이 null인 항목이 있습니다. 해당 항목의 값을 직접 입력해 주세요")
-                st.stop()
+            if (start_time == None) and (level == 1):
+                section["startTime"] = 0
+
+            if (start_time == None) and (level != 1):
+                input_key = f"{file_name}_{data.index(section)}_startTime"
+                existing_value = st.session_state.get(input_key)
+
+                if existing_value is None:
+                    st.warning(f"⚠️ startTime이 null인 항목이 있습니다. 값을 입력해주세요.")
+                    section["startTime"] = st.number_input(f"변경 위치: {file_name} | '{title}' 의 startTime", min_value=0, key=input_key)
+                    st.stop()
+                else:
+                    section["startTime"] = existing_value
 
             # content 개행 분할 및 첫 항목의 "- " 제거
             content = section.get("content")
@@ -99,7 +111,10 @@ st.markdown("")  # 공란
 """
 
 > `new` 수정 적용 사항
-- startTime이 간혹 null값일 경우 이를 직접 수정할 것을 경고함
+- 최상단에 위치한 **전체 요약** 영역의 startTime 값을 null에서 0으로 수정 적용함
+    - 요약내용의 최상단에 위치한 **전체 요약** 영역(이 강의는...으로 시작하는 영역)의 startTime이 null값으로 설정되도록 릴리즈 AI 측에서 업데이트 됨 
+    - startTime의 null값은 백오피스 상에 업로드 에러를 발생시킴
+- 그 외 내용에서 startTime이 간혹 null값일 경우 이를 직접 수정하는 로직 추가
 """
 st.markdown("")  # 공란
 """
